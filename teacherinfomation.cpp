@@ -1,50 +1,61 @@
 #include "teacherinfomation.h"
-#include<iomanip>
+
 using namespace std;
 
-void management::t_add() {
+void management::t_add() 
+{
 	
-		teacherinfo new_t;  //Í¨¹ı¹¹Ôìº¯ÊıÀ´ÊäÈëÊı¾İ
-		m_teachers_list.push_back(new_t); //½«¹¹ÔìµÄÒ»¸öteacherinfo¶ÔÏó·ÅÈëm_teachers_listÖĞ
+		teacherinfo new_t;  //é€šè¿‡æ„é€ å‡½æ•°æ¥è¾“å…¥æ•°æ®
+		m_teachers_list.push_back(new_t); //å°†æ„é€ çš„ä¸€ä¸ªteacherinfoå¯¹è±¡æ”¾å…¥m_teachers_listä¸­
 };
 
-vector<teacherinfo> management::t_find() {    //ÕâÀï»¹Ğè½â¾öfindÈİÆ÷¸´ÓÃµÄÎÊÌâ£¬ÊÇ·ñÃ¿´Î¶¼×Ô¶¯Çå³ı»òÏûÍö£¿
+vector<teacherinfo> management::t_find() 
+{    //è¿™é‡Œè¿˜éœ€è§£å†³findå®¹å™¨å¤ç”¨çš„é—®é¢˜ï¼Œæ˜¯å¦æ¯æ¬¡éƒ½è‡ªåŠ¨æ¸…é™¤æˆ–æ¶ˆäº¡ï¼Ÿ
 	vector<teacherinfo> rightinformation;
 	cout << "Select the information you want to use as the search criteria:\n"
 		<< "1.Name or ID\n2.Range of payable wages, actual wages and provident fund\n3.Fuzzy search\n4.Back\nType the number to choose a function:" << endl;
 	int secchoice, k = 0;
 	cin >> secchoice;
-	switch (secchoice) {
-	case 1: {
+	switch (secchoice) 
+	{
+	case 1: 
+	{
 		cout << "Type the Name or ID:" << endl;
 		string info;
 		cin >> info;
-		cout << "|--------------------------------------------------------------------------|" << endl
-			<< "|     id    | name |  unit  |   number   |basic salary| bonus | tax | fund |" << endl
-			<< "|--------------------------------------------------------------------------|" << endl;
-		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-			if ((*it).t_id == info || (*it).t_name == info) {
+		cout << "---------------------------------------------------------------------------------------" << endl
+			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+			<< "---------------------------------------------------------------------------------------" << endl;
+		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+		{
+			if ((*it).t_id == info || (*it).t_name == info) 
+			{
 				cout << *it << endl;
 				rightinformation.push_back(*it);
-				k = 1;
+				k = 1;   //kç”¨äºåˆ¤æ–­æ˜¯å¦æœ‰åŒ¹é…é¡¹ï¼Œç›¸å½“äºè¾“å‡ºå®¹å™¨æ˜¯å¦ä¸ºç©ºçš„åˆ¤æ–­
 			}
 		}
-		if (k == 0) {
+		if (k == 0) 
+		{
 			cout << "No compliant information in the system" << endl;
-			return rightinformation; }
+			return rightinformation; 
+		}
 		break;
 	}
-	case 2: {
+	case 2: 
+	{
 		cout << "Tpye The Range of payable wages, actual wages and provident fund: " << endl;
 		int a, b, c, d, e, f;
 		cout << "( "; cin >> a; cout << " , "; cin >> b; cout << " )\n";
 		cout << "( "; cin >> c; cout << " , "; cin >> d; cout << " )\n";
-		cout << "( "; cin >> e; cout << " , "; cin >> f; cout << " )\n";//¿ÉÔÙ³¢ÊÔÓÃÍË¸ñ·û¸ÄÉÆÅÅ°æ
-		cout << "|--------------------------------------------------------------------------|" << endl
-			<< "|     id    | name |  unit  |   number   |basic salary| bonus | tax | fund |" << endl
-			<< "|--------------------------------------------------------------------------|" << endl;
-		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-			if ((((*it).t_sum_should <= b) && ((*it).t_sum_should >= a)) && (((*it).t_sum_exact <= d) && ((*it).t_sum_exact >= c)) && (((*it).t_fund <= f) && ((*it).t_fund >= e))) {
+		cout << "( "; cin >> e; cout << " , "; cin >> f; cout << " )\n";//å¯å†å°è¯•ç”¨é€€æ ¼ç¬¦æ”¹å–„æ’ç‰ˆ
+		cout << "---------------------------------------------------------------------------------------" << endl
+			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+			<< "---------------------------------------------------------------------------------------" << endl;
+		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+		{
+			if ((((*it).t_sum_should <= b) && ((*it).t_sum_should >= a)) && (((*it).t_sum_exact <= d) && ((*it).t_sum_exact >= c)) && (((*it).t_fund <= f) && ((*it).t_fund >= e))) 
+			{
 				cout << *it << endl;
 				rightinformation.push_back(*it);
 				k = 1;
@@ -53,12 +64,15 @@ vector<teacherinfo> management::t_find() {    //ÕâÀï»¹Ğè½â¾öfindÈİÆ÷¸´ÓÃµÄÎÊÌâ£¬
 		if (k == 0)cout << "No compliant information in the system" << endl;
 		break;
 	}
-	/*case 3: {
+	/*case 3: 
+	{
 		cout << "Type your Information:" << endl;
 		string info2;
 		cin >> info2;
-		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-			if (strstr((*it).t_name, info2) != NULL || strstr((*it).t_number, info2) != NULL || strstr((*it).t_unit, info2) != NULL) { //ĞèÒª×Ô¶¨ÒåÒ»¸öÓëstrstr()¹¦ÄÜÏàÍ¬µÄº¯ÊıÒÔÊµÏÖÄ£ºı²éÕÒ
+		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+		{
+			if (strstr((*it).t_name, info2) != NULL || strstr((*it).t_number, info2) != NULL || strstr((*it).t_unit, info2) != NULL) 
+			{ //éœ€è¦è‡ªå®šä¹‰ä¸€ä¸ªä¸strstr()åŠŸèƒ½ç›¸åŒçš„å‡½æ•°ä»¥å®ç°æ¨¡ç³ŠæŸ¥æ‰¾
 				int i = 1;
 				cout << i << "." << *it << endl;
 				rightinformation.push_back(*it);
@@ -67,36 +81,42 @@ vector<teacherinfo> management::t_find() {    //ÕâÀï»¹Ğè½â¾öfindÈİÆ÷¸´ÓÃµÄÎÊÌâ£¬
 			}
 		}
 		if (k == 0)cout << "No compliant information in the system" << endl;
-		else {
+		else 
+		{
 			cout << "chose your destination info(type the number before the info)" << endl;
 			int x;
-			cin >> x;                                //Ä£ºı²éÕÒÊ±¶ş´ÎÑ¡ÔñĞÅÏ¢
+			cin >> x;                                //æ¨¡ç³ŠæŸ¥æ‰¾æ—¶äºŒæ¬¡é€‰æ‹©ä¿¡æ¯
 			cout << rightinformation.at(x) << endl;
 			vector<teacherinfo> rightinformation1 = { rightinformation.at(x) };
 			return rightinformation1;
 		}
 		break;
-		}*/
+	}*/
 		  
 	}
-
 	return rightinformation;
 }
 
-void management::t_delete(const vector<teacherinfo>& a) {
-	if(a.empty()==0){
+void management::t_delete(const vector<teacherinfo>& a) 
+{
+	if(a.empty()==0)
+	{
 		cout << "Are you sure to delete these infomation?(Y?N)\a" << endl;
 		char judge = 'N';
 		cin >> judge;
-		if (judge == 'Y') {
-			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-				for (auto it1 = a.begin(); it1 != a.end(); ++it1) {
-					if (*it == *it1) {
-						m_teachers_list.erase(it);  //ÕâÀï¿ÉÄÜÒªµ÷ÓÃÆäËûº¯ÊıÊÍ·ÅÉ¾³ıÁËÖ®ºóÈİÆ÷µÄ¿Õ¼ä
+		if (judge == 'Y') 
+		{
+			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+			{
+				for (auto it1 = a.begin(); it1 != a.end(); ++it1) 
+				{
+					if (*it == *it1) 
+					{
+						m_teachers_list.erase(it);  //è¿™é‡Œå¯èƒ½è¦è°ƒç”¨å…¶ä»–å‡½æ•°é‡Šæ”¾åˆ é™¤äº†ä¹‹åå®¹å™¨çš„ç©ºé—´
 					}
 				}
-				if (m_teachers_list.empty())break;//Í¨¹ıÅĞ¶ÏÈİÆ÷ÊÇ·ñÎª¿Õ¾ö¶¨ÊÇ·ñ¼ÌĞø±éÀúÀÏÊ¦Ãûµ¥ÈİÆ÷
-			}//É¾³ıÁ½¸öÈİÆ÷ÖØºÏµÄ²¿·Ö£¬Í¨¹ıÁ½¸öµü´úÆ÷·Ö±ğ±éÀúÁ½¸öÈİÆ÷ÖĞµÄÔªËØ£¬ÕÒ³öÏàÍ¬µÄÏî£¬Í¨¹ım_teachers_list.erase(it)
+				if (m_teachers_list.empty())break;//é€šè¿‡åˆ¤æ–­å®¹å™¨æ˜¯å¦ä¸ºç©ºå†³å®šæ˜¯å¦ç»§ç»­éå†è€å¸ˆåå•å®¹å™¨
+			}//åˆ é™¤ä¸¤ä¸ªå®¹å™¨é‡åˆçš„éƒ¨åˆ†ï¼Œé€šè¿‡ä¸¤ä¸ªè¿­ä»£å™¨åˆ†åˆ«éå†ä¸¤ä¸ªå®¹å™¨ä¸­çš„å…ƒç´ ï¼Œæ‰¾å‡ºç›¸åŒçš„é¡¹ï¼Œé€šè¿‡m_teachers_list.erase(it)
 			cout << "Complete!\a" << endl;
 		}
 	}
@@ -104,12 +124,15 @@ void management::t_delete(const vector<teacherinfo>& a) {
 	
 }
 
-void management::t_edit(const vector<teacherinfo>& a) {
-	if (a.empty() == 0){
+void management::t_edit(const vector<teacherinfo>& a) 
+{
+	if (a.empty() == 0)
+	{
 		cout << "Choose which info you are going to edit:\n(1.id\n2.name\n3.unit\n4.number\n5.basicsalary\n6.bonus\n7.tax\n8.fund)" << endl;
 		int judge;
 		cin >> judge;
-		switch (judge) {
+		switch (judge) 
+		{
 		case 1:
 			t_editchoice("id", a); break;
 		case 2:
@@ -129,17 +152,22 @@ void management::t_edit(const vector<teacherinfo>& a) {
 		}
 		cout << "Info has been changed!\a" << endl;	
 	}
-	else {
+	else 
+	{
 		cout << "There is no information that can be edited\a" << endl;
 	}
 }
 	
 
 
-void management::t_editchoice(string str, const vector<teacherinfo>& a) {
-	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-		for (auto it1 = a.begin(); it1 != a.end(); ++it1) {
-			if (*it == *it1) {
+void management::t_editchoice(string str, const vector<teacherinfo>& a) 
+{
+	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+	{
+		for (auto it1 = a.begin(); it1 != a.end(); ++it1) 
+		{
+			if (*it == *it1) 
+			{
 				cout << "the last info is : "<<*it;
 				cout << "type the new info!:" << endl;
 				if (str == "id")cin >> (*it).t_id;
@@ -152,10 +180,14 @@ void management::t_editchoice(string str, const vector<teacherinfo>& a) {
 	}
 }
 
-void management::t_editchoice(int n, const vector<teacherinfo>& a) {
-	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-		for (auto it1 = a.begin(); it1 != a.end(); ++it1) {
-			if (*it == *it1) {
+void management::t_editchoice(int n, const vector<teacherinfo>& a) 
+{
+	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+	{
+		for (auto it1 = a.begin(); it1 != a.end(); ++it1) 
+		{
+			if (*it == *it1) 
+			{
 				cout << "the last info is : " << *it;
 				cout << "type the new info!:" << endl;
 				if (n == 5)cin >> (*it).t_basic_salary;
@@ -169,30 +201,132 @@ void management::t_editchoice(int n, const vector<teacherinfo>& a) {
 }
 
 	
-/*void management::t_salaryAnalyzeofUnit(string& unit) {
+void management::t_salaryAnalyzeofUnit() 
+{
 	cout << "Type the Unit you are going to analyze:" << endl;
 	string info;
 	cin >> info;
-	double sum = 0, i = 0, k;
-	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) {
-		if ((*it).t_unit == info) {
-			cout << *it << endl;
-			sum += (*it).t_sum_exact;
+	cout << "Which information you would like to analyze?\n" << "1 Final Paying Amount\n2 Total Pay Amount\n3 Provident Fund\n4 all of above"<<endl;
+	int anwser = 0,k = 0;
+	cin >> anwser;
+	vector<teacherinfo> rightinformation;
+	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+	{
+		if ((*it).t_unit == info) 
+		{
+			rightinformation.push_back(*it);
 			k = 1;
 		}
 	}
-}
-void management::t_sort() {
-//
-}
-void management::t_file() {}*/
+	if (anwser == 1 || anwser == 2 || anwser == 3)
+	{
+		cout << "The average salary is:" << averaging(rightinformation, anwser) << endl;
+		cout << "Standard deviation is:" << Standard_deviation(rightinformation, anwser) << endl;
+	}
+	else 
+	{
+		cout << "Average Final Paying Amount:"<<averaging(rightinformation, 1)<<endl;
+		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 1) << endl;
+		cout << "Average Total Pay Amount:" << averaging(rightinformation, 2) << endl;
+		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 2) << endl;
+		cout << "Average Provident Fund:" << averaging(rightinformation, 3) << endl;
+		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 3) << endl;
+	}
 
-ostream& operator<<(ostream& os, const teacherinfo& a) {
-	os << setw(12) << a.t_id << setw(7) << a.t_name << setw(9) << a.t_unit << setw(12) << a.t_number 
-		<< setw(14) << a.t_basic_salary << setw(8) << a.t_bonus << setw(6) << a.t_tax << setw(7) << a.t_fund << endl;
+}
+void management::t_sort() 
+{
+	int n = m_teachers_list.size();
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n - 1 - i; j++)
+		{
+			if (m_teachers_list[j] < m_teachers_list[j+1])
+				swap(m_teachers_list[j], m_teachers_list[j+1]);
+		}
+	}
+	cout << "---------------------------------------------------------------------------------------" << endl
+		 << "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+		 << "---------------------------------------------------------------------------------------" << endl;
+	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
+	{
+		cout << *it << endl;
+	}
+	cout << "Back to the main menu...\a";
+	Sleep(3000);
+}
+
+/*void management::t_file() {}*/
+
+ostream& operator<<(ostream& os, const teacherinfo& a) 
+{
+	os << setw(12) << a.t_id << setw(7) << a.t_name << setw(9) << a.t_unit << setw(12) << a.t_number
+		<< setw(14) << a.t_basic_salary << setw(8) << a.t_bonus << setw(6) << a.t_tax << setw(7) << a.t_fund << setw(8) << a.t_sum_exact << endl;
 	return os;
 }
 
-bool operator==(teacherinfo& a, const teacherinfo& b) {
-	return (a.t_name == b.t_name) && (a.t_id == b.t_id) && (a.t_number == b.t_number) && (a.t_unit == b.t_unit); //ÓÉÓÚÊ¹ÓÃÉ¾³ı¹¦ÄÜÊ±£¬ÓÃµ½ÁËÒ»¸öconst teacherinfo¶ÔÏó£¨²»Ê¹ÓÃconstÀàĞÍ»á±¨´í£©ºÍteacherinfo¶ÔÏóµÄ±È½Ï£¬¹ÊÖØÔØ==
+bool operator==(teacherinfo& a, const teacherinfo& b) 
+{
+	return (a.t_name == b.t_name) && (a.t_id == b.t_id) && (a.t_number == b.t_number) && (a.t_unit == b.t_unit); //ç”±äºä½¿ç”¨åˆ é™¤åŠŸèƒ½æ—¶ï¼Œç”¨åˆ°äº†ä¸€ä¸ªconst teacherinfoå¯¹è±¡ï¼ˆä¸ä½¿ç”¨constç±»å‹ä¼šæŠ¥é”™ï¼‰å’Œteacherinfoå¯¹è±¡çš„æ¯”è¾ƒï¼Œæ•…é‡è½½==
+}
+
+bool operator<(teacherinfo& a, const teacherinfo& b)
+{
+	if (a.t_sum_exact < b.t_sum_exact)return 1;
+	else {
+		if (a.t_sum_exact == b.t_sum_exact)
+		{
+			if (a.t_fund < b.t_fund)return 1;
+			else 
+			{
+				if (a.t_fund == b.t_fund)
+				{
+					if (a.t_id < b.t_id)return 1;
+					else return 0;
+				}
+				else return 0;
+			}
+		}
+		else return 0;
+	}
+}
+
+void loop(int x, management& a) //ä¸»ç¨‹åºä¸­çš„å¾ªç¯å‡½æ•°
+{
+	char answer;
+	do {
+		if (x == 1)a.t_add();
+		if (x == 2)a.t_find();
+		if (x == 3)a.t_delete(a.t_find());
+		if (x == 4)a.t_edit(a.t_find());
+		if (x == 5)a.t_salaryAnalyzeofUnit();
+		cout << "Continue ?(Y/N):" << endl;        //æ˜¯å¦ç»§ç»­æŸ¥æ‰¾æ•°æ®
+		cin >> answer;
+	} while (answer == 'Y');
+	cout << "Back to the main menu...\a";
+	Sleep(300);
+}
+
+double averaging(const vector<teacherinfo>& a, int b)
+{
+	double sum = 0;
+	for (auto it = a.begin(); it != a.end(); ++it)
+	{
+		if (b == 1)sum += (*it).t_sum_exact;
+		if (b == 2)sum += (*it).t_sum_should;
+		if (b == 3)sum += (*it).t_fund;
+	}
+	return sum / a.size();
+}
+
+double Standard_deviation(const vector<teacherinfo>& a, int b)
+{
+	double sum = 0;
+	for (auto it = a.begin(); it != a.end(); ++it)
+	{
+		if (b == 1)sum += ((*it).t_sum_exact - averaging(a, 1)) * ((*it).t_sum_exact - averaging(a, 1));
+		if (b == 2)sum += ((*it).t_sum_should - averaging(a, 2)) * ((*it).t_sum_should - averaging(a, 2));
+		if (b == 3)sum += ((*it).t_fund - averaging(a, 3)) * ((*it).t_fund - averaging(a, 3));
+	}
+	return sqrt(sum / a.size());
 }
