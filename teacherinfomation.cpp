@@ -4,13 +4,18 @@ using namespace std;
 
 void management::t_add() 
 {
-	
-		teacherinfo new_t;  //通过构造函数来输入数据
+		teacherinfo new_t; 
+		cout << "please enter the info of the teacher\n"
+			<< "---------------------------------------------------------------------------" << endl
+			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |" << endl
+			<< "---------------------------------------------------------------------------" << endl;
+		cin >> new_t.t_id >> new_t.t_name >> new_t.t_unit >> new_t.t_number >> new_t.t_basic_salary >> new_t.t_bonus >> new_t.t_tax >> new_t.t_fund;//通过构造函数来输入数据
 		m_teachers_list.push_back(new_t); //将构造的一个teacherinfo对象放入m_teachers_list中
+		
 };
 
 vector<teacherinfo> management::t_find() 
-{    //这里还需解决find容器复用的问题，是否每次都自动清除或消亡？
+{  
 	vector<teacherinfo> rightinformation;
 	cout << "Select the information you want to use as the search criteria:\n"
 		<< "1.Name or ID\n2.Range of payable wages, actual wages and provident fund\n3.Fuzzy search\n4.Back\nType the number to choose a function:" << endl;
@@ -20,6 +25,7 @@ vector<teacherinfo> management::t_find()
 	{
 	case 1: 
 	{
+
 		cout << "Type the Name or ID:" << endl;
 		string info;
 		cin >> info;
@@ -101,21 +107,24 @@ void management::t_delete(const vector<teacherinfo>& a)
 {
 	if(a.empty()==0)
 	{
-		cout << "Are you sure to delete these infomation?(Y?N)\a" << endl;
+		cout << "Are you sure to delete these infomation?(Y/N)\a" << endl;
 		char judge = 'N';
 		cin >> judge;
 		if (judge == 'Y') 
 		{
-			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
-			{
+			char k = 0;
+			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end();) 
+			{	
 				for (auto it1 = a.begin(); it1 != a.end(); ++it1) 
 				{
-					if (*it == *it1) 
-					{
-						m_teachers_list.erase(it);  //这里可能要调用其他函数释放删除了之后容器的空间
+					if (*it == *it1){
+						it=m_teachers_list.erase(it);//这里可能要调用其他函数释放删除了之后容器的空间
+						k = 1;
+						break;
 					}
+					else k = 0;
 				}
-				if (m_teachers_list.empty())break;//通过判断容器是否为空决定是否继续遍历老师名单容器
+				if (k == 0)it++;
 			}//删除两个容器重合的部分，通过两个迭代器分别遍历两个容器中的元素，找出相同的项，通过m_teachers_list.erase(it)
 			cout << "Complete!\a" << endl;
 		}
@@ -225,12 +234,12 @@ void management::t_salaryAnalyzeofUnit()
 	}
 	else 
 	{
-		cout << "Average Final Paying Amount:"<<averaging(rightinformation, 1)<<endl;
+		cout << "Average Final Paying Amount: "<<averaging(rightinformation, 1)<<endl;
 		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 1) << endl;
-		cout << "Average Total Pay Amount:" << averaging(rightinformation, 2) << endl;
-		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 2) << endl;
-		cout << "Average Provident Fund:" << averaging(rightinformation, 3) << endl;
-		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 3) << endl;
+		cout << "Average Total Pay Amount: " << averaging(rightinformation, 2) << endl;
+		cout << "Standard deviation is: " << Standard_deviation(rightinformation, 2) << endl;
+		cout << "Average Provident Fund: " << averaging(rightinformation, 3) << endl;
+		cout << "Standard deviation is: " << Standard_deviation(rightinformation, 3) << endl;
 	}
 
 }
@@ -241,10 +250,11 @@ void management::t_sort()
 	{
 		for (int j = 0; j < n - 1 - i; j++)
 		{
-			if (m_teachers_list[j] < m_teachers_list[j+1])
-				swap(m_teachers_list[j], m_teachers_list[j+1]);
+			if (m_teachers_list[j] < m_teachers_list[j + 1])
+				swap(m_teachers_list[j], m_teachers_list[j + 1]);
 		}
 	}
+
 	cout << "---------------------------------------------------------------------------------------" << endl
 		 << "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
 		 << "---------------------------------------------------------------------------------------" << endl;
@@ -252,17 +262,82 @@ void management::t_sort()
 	{
 		cout << *it << endl;
 	}
+	
 	cout << "Back to the main menu...\a";
 	Sleep(3000);
 }
 
-/*void management::t_file() {}*/
+void management::t_filein()//读取文件并写入到系统中
+{
+	char line[256];
+	cout << "Type the name of your file:";
+	string a;
+	cin >> a;
+	ifstream in(a,ios::out);
+	if (!in.is_open())
+	{
+		cout << "Error opening file"; exit(1);
+	}
+	while (!in.eof())
+	{
+		in.getline(line, 100);
+		teacherinfo new_t;
+		new_t = line;
+		m_teachers_list.push_back(new_t);	
+	}
+	cin.get();
+}
+void management::t_fileout() 
+{
+	char anwser;
+	cout << "Do you want to write the sorted information to a file?(Y/N)" << endl;
+	cin >> anwser;
+	if (anwser == 'Y')
+	{
+		ofstream out("teacherdata2.txt");
+		if (out.is_open()&&!(m_teachers_list.empty()))
+		{	
+			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
+			{
+				out << *it << endl;
+			}
+			out.close();
+		}
+	}
+};
 
 ostream& operator<<(ostream& os, const teacherinfo& a) 
 {
 	os << setw(12) << a.t_id << setw(7) << a.t_name << setw(9) << a.t_unit << setw(12) << a.t_number
 		<< setw(14) << a.t_basic_salary << setw(8) << a.t_bonus << setw(6) << a.t_tax << setw(7) << a.t_fund << setw(8) << a.t_sum_exact << endl;
 	return os;
+}
+
+teacherinfo& teacherinfo::operator=(char a[])
+{
+	vector<string> b;
+	char* c[100] = { 0 };
+	char* tokenPtr = strtok_s(a, " ",c);
+	while (tokenPtr != NULL) 
+	{
+		b.push_back(tokenPtr);
+		tokenPtr = strtok_s(NULL, " ",c);
+	}
+	if (b.size() != 0) 
+	{
+	t_id = b.at(0);
+	t_name = b.at(1);
+	t_unit = b.at(2);
+	t_number=b.at(3);
+	t_basic_salary = atoi(b.at(4).c_str());
+	t_bonus=atoi(b.at(5).c_str());
+	t_tax = atoi(b.at(6).c_str()); 
+	t_fund = atoi(b.at(7).c_str());
+	t_sum_should = t_basic_salary + t_bonus;
+	t_sum_minus = t_tax + t_fund;
+	t_sum_exact = t_basic_salary + t_bonus - t_tax - t_fund;
+	}
+	return *this;
 }
 
 bool operator==(teacherinfo& a, const teacherinfo& b) 
@@ -293,7 +368,7 @@ bool operator<(teacherinfo& a, const teacherinfo& b)
 
 void loop(int x, management& a) //主程序中的循环函数
 {
-	char answer;
+	char anwser;
 	do {
 		if (x == 1)a.t_add();
 		if (x == 2)a.t_find();
@@ -301,8 +376,8 @@ void loop(int x, management& a) //主程序中的循环函数
 		if (x == 4)a.t_edit(a.t_find());
 		if (x == 5)a.t_salaryAnalyzeofUnit();
 		cout << "Continue ?(Y/N):" << endl;        //是否继续查找数据
-		cin >> answer;
-	} while (answer == 'Y');
+		cin >> anwser;
+	} while (anwser == 'Y');
 	cout << "Back to the main menu...\a";
 	Sleep(300);
 }
