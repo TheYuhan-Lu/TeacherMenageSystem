@@ -9,9 +9,10 @@ void management::t_add()
 			<< "---------------------------------------------------------------------------" << endl
 			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |" << endl
 			<< "---------------------------------------------------------------------------" << endl;
-		cin >> new_t.t_id >> new_t.t_name >> new_t.t_unit >> new_t.t_number >> new_t.t_basic_salary >> new_t.t_bonus >> new_t.t_tax >> new_t.t_fund;//通过构造函数来输入数据
-		m_teachers_list.push_back(new_t); //将构造的一个teacherinfo对象放入m_teachers_list中
 		
+		cin >> new_t.t_id >> new_t.t_name >> new_t.t_unit >> new_t.t_number >> new_t.t_basic_salary >> new_t.t_bonus >> new_t.t_tax >> new_t.t_fund;//通过构造函数来输入数据
+		new_t.t_sum_should = new_t.t_basic_salary + new_t.t_bonus, new_t.t_sum_minus = new_t.t_tax + new_t.t_fund, new_t.t_sum_exact = new_t.t_basic_salary + new_t.t_bonus - new_t.t_tax - new_t.t_fund;
+		m_teachers_list.push_back(new_t); //将构造的一个teacherinfo对象放入m_teachers_list中	
 };
 
 vector<teacherinfo> management::t_find() 
@@ -29,12 +30,12 @@ vector<teacherinfo> management::t_find()
 		cout << "Type the Name or ID:" << endl;
 		string info;
 		cin >> info;
-		cout << "---------------------------------------------------------------------------------------" << endl
-			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
-			<< "---------------------------------------------------------------------------------------" << endl;
+		cout << "-------------------------------------------------------------------------------------------" << endl
+			<< "|    id    |" << "  name  |" << "  unit  |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+			<< "-------------------------------------------------------------------------------------------" << endl;
 		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
 		{
-			if ((*it).t_id == info || (*it).t_name == info) 
+			if ((*it).t_id == info || (*it).t_name == info) //遍历容器进行信息比对
 			{
 				cout << *it << endl;
 				rightinformation.push_back(*it);
@@ -55,9 +56,9 @@ vector<teacherinfo> management::t_find()
 		cout << "( "; cin >> a; cout << " , "; cin >> b; cout << " )\n";
 		cout << "( "; cin >> c; cout << " , "; cin >> d; cout << " )\n";
 		cout << "( "; cin >> e; cout << " , "; cin >> f; cout << " )\n";//可再尝试用退格符改善排版
-		cout << "---------------------------------------------------------------------------------------" << endl
-			<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
-			<< "---------------------------------------------------------------------------------------" << endl;
+		cout << "-------------------------------------------------------------------------------------------" << endl
+			<< "|    id    |" << "  name  |" << "  unit  |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+			<< "-------------------------------------------------------------------------------------------" << endl;
 		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
 		{
 			if ((((*it).t_sum_should <= b) && ((*it).t_sum_should >= a)) && (((*it).t_sum_exact <= d) && ((*it).t_sum_exact >= c)) && (((*it).t_fund <= f) && ((*it).t_fund >= e))) 
@@ -112,7 +113,7 @@ void management::t_delete(const vector<teacherinfo>& a)
 		cin >> judge;
 		if (judge == 'Y') 
 		{
-			char k = 0;
+			char k = 0;		//通过该值的辅助帮助解决当删除容器中的元素而导致的存在野指针的问题
 			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end();) 
 			{	
 				for (auto it1 = a.begin(); it1 != a.end(); ++it1) 
@@ -212,19 +213,23 @@ void management::t_editchoice(int n, const vector<teacherinfo>& a)
 	
 void management::t_salaryAnalyzeofUnit() 
 {
-	cout << "Type the Unit you are going to analyze:" << endl;
+	cout << "Type the Unit you are going to analyze:（\"all\" to analyze all unit)" << endl;
 	string info;
 	cin >> info;
 	cout << "Which information you would like to analyze?\n" << "1 Final Paying Amount\n2 Total Pay Amount\n3 Provident Fund\n4 all of above"<<endl;
 	int anwser = 0,k = 0;
 	cin >> anwser;
 	vector<teacherinfo> rightinformation;
-	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it) 
+	if (info == "all")rightinformation = m_teachers_list;
+	else
 	{
-		if ((*it).t_unit == info) 
+		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
 		{
-			rightinformation.push_back(*it);
-			k = 1;
+			if ((*it).t_unit == info)   //筛选出某个单位的所有信息
+			{
+				rightinformation.push_back(*it);
+				k = 1;
+			}
 		}
 	}
 	if (anwser == 1 || anwser == 2 || anwser == 3)
@@ -251,28 +256,25 @@ void management::t_sort()
 		for (int j = 0; j < n - 1 - i; j++)
 		{
 			if (m_teachers_list[j] < m_teachers_list[j + 1])
-				swap(m_teachers_list[j], m_teachers_list[j + 1]);
+				swap(m_teachers_list[j], m_teachers_list[j + 1]);//冒泡排序
 		}
 	}
 
-	cout << "---------------------------------------------------------------------------------------" << endl
-		 << "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
-		 << "---------------------------------------------------------------------------------------" << endl;
+	cout << "-------------------------------------------------------------------------------------------" << endl
+		 << "|    id    |" << "  name  |" << "  unit  |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
+		 << "-------------------------------------------------------------------------------------------" << endl;
 	for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
 	{
 		cout << *it << endl;
 	}
 	
-	cout << "Back to the main menu...\a";
+	cout << "Back to the main menu...\a\n";
 	Sleep(3000);
 }
 
-void management::t_filein()//读取文件并写入到系统中
+void management::t_filein(string a)//读取文件并写入到系统中
 {
 	char line[256];
-	cout << "Type the name of your file:";
-	string a;
-	cin >> a;
 	ifstream in(a,ios::out);
 	if (!in.is_open())
 	{
@@ -280,26 +282,25 @@ void management::t_filein()//读取文件并写入到系统中
 	}
 	while (!in.eof())
 	{
-		in.getline(line, 100);
+		in.getline(line, 100); //逐行读入
 		teacherinfo new_t;
-		new_t = line;
+		new_t = line; //将读入的信息用于给teacherinfo对象赋值
 		m_teachers_list.push_back(new_t);	
 	}
-	cin.get();
 }
 void management::t_fileout() 
 {
 	char anwser;
-	cout << "Do you want to write the sorted information to a file?(Y/N)" << endl;
+	cout << "Do you want to write the sorted information to a file?(Y/N)\n";
 	cin >> anwser;
 	if (anwser == 'Y')
 	{
-		ofstream out("teacherdata2.txt");
-		if (out.is_open()&&!(m_teachers_list.empty()))
+		ofstream out("teacherdata.txt");
+		if (out.is_open()&&!(m_teachers_list.empty()))//当文件打开且容器不为空时进行写入操作
 		{	
 			for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
 			{
-				out << *it << endl;
+				out << *it;
 			}
 			out.close();
 		}
@@ -308,8 +309,8 @@ void management::t_fileout()
 
 ostream& operator<<(ostream& os, const teacherinfo& a) 
 {
-	os << setw(12) << a.t_id << setw(7) << a.t_name << setw(9) << a.t_unit << setw(12) << a.t_number
-		<< setw(14) << a.t_basic_salary << setw(8) << a.t_bonus << setw(6) << a.t_tax << setw(7) << a.t_fund << setw(8) << a.t_sum_exact << endl;
+	os << setw(12) << a.t_id << setw(7) << a.t_name << setw(9) << a.t_unit << setw(14) << a.t_number
+		<< setw(12) << a.t_basic_salary << setw(9) << a.t_bonus << setw(7) << a.t_tax << setw(7) << a.t_fund << setw(8) << a.t_sum_exact<<endl;
 	return os;
 }
 
@@ -317,7 +318,7 @@ teacherinfo& teacherinfo::operator=(char a[])
 {
 	vector<string> b;
 	char* c[100] = { 0 };
-	char* tokenPtr = strtok_s(a, " ",c);
+	char* tokenPtr = strtok_s(a, " ",c);//通过strtok_s对字符串进行分隔
 	while (tokenPtr != NULL) 
 	{
 		b.push_back(tokenPtr);
@@ -378,7 +379,7 @@ void loop(int x, management& a) //主程序中的循环函数
 		cout << "Continue ?(Y/N):" << endl;        //是否继续查找数据
 		cin >> anwser;
 	} while (anwser == 'Y');
-	cout << "Back to the main menu...\a";
+	cout << "Back to the main menu...\a\n";
 	Sleep(300);
 }
 
@@ -405,3 +406,4 @@ double Standard_deviation(const vector<teacherinfo>& a, int b)
 	}
 	return sqrt(sum / a.size());
 }
+
