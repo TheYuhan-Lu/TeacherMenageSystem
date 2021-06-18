@@ -5,10 +5,10 @@ using namespace std;
 void management::t_add()
 {
 	teacherinfo new_t;
-	cout << "please enter the info of the teacher\n"
-		<< "---------------------------------------------------------------------------" << endl
-		<< "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |" << endl
-		<< "---------------------------------------------------------------------------" << endl;
+	cout <<"please enter the info of the teacher\n"
+		 << "---------------------------------------------------------------------------" << endl
+		 << "|    id    |" << " name |" << " unit |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |" << endl
+		 << "---------------------------------------------------------------------------" << endl;
 	cin >> new_t.t_id >> new_t.t_name >> new_t.t_unit >> new_t.t_number >> new_t.t_basic_salary >> new_t.t_bonus >> new_t.t_tax >> new_t.t_fund;//通过构造函数来输入数据
 	new_t.t_sum_should = new_t.t_basic_salary + new_t.t_bonus, new_t.t_sum_minus = new_t.t_tax + new_t.t_fund, new_t.t_sum_exact = new_t.t_basic_salary + new_t.t_bonus - new_t.t_tax - new_t.t_fund;
 	m_teachers_list.push_back(new_t); //将构造的一个teacherinfo对象放入m_teachers_list中
@@ -19,7 +19,10 @@ vector<teacherinfo> management::t_find()
 {
 	vector<teacherinfo> rightinformation;
 	cout << "Select the information you want to use as the search criteria:\n"
-		<< "1.Name or ID\n2.Range of payable wages, actual wages and provident fund\n3.Fuzzy search\n4.Back\nType the number to choose a function:" << endl;
+		<< "============================================================\n"
+		<< "\t1.Name or ID\n\t2.Range of payable wages, actual wages and provident fund\n\t3.Fuzzy search(with id,name,number,unit)\n\t4.Cancel\n"
+		<< "============================================================\n"
+		<<"Type the number to choose a function:" << endl;
 	int secchoice, k = 0;
 	cin >> secchoice;
 	switch (secchoice)
@@ -44,7 +47,7 @@ vector<teacherinfo> management::t_find()
 		}
 		if (k == 0)
 		{
-			cout << "No compliant information in the system" << endl;
+			cout << "==========  No compliant information in the system  ========" << endl;
 			return rightinformation;
 		}
 		break;
@@ -55,7 +58,8 @@ vector<teacherinfo> management::t_find()
 		int a, b, c, d, e, f;
 		cout << "( "; cin >> a; cout << " , "; cin >> b; cout << " )\n";
 		cout << "( "; cin >> c; cout << " , "; cin >> d; cout << " )\n";
-		cout << "( "; cin >> e; cout << " , "; cin >> f; cout << " )\n";//可再尝试用退格符改善排版
+		cout << "( "; cin >> e; cout << " , "; cin >> f; cout << " )\n";
+		system("cls");
 		cout << "-------------------------------------------------------------------------------------------" << endl
 			<< "|    id    |" << "  name  |" << "  unit  |" << "    number    |" << "basic salary|" << " bonus |" << " tax |" << " fund |Final Salary|" << endl
 			<< "-------------------------------------------------------------------------------------------" << endl;
@@ -68,38 +72,38 @@ vector<teacherinfo> management::t_find()
 				k = 1;
 			}
 		}
-		if (k == 0)cout << "No compliant information in the system" << endl;
+		if (k == 0)cout << "\nNo compliant information in the system" << endl;
 		break;
 	}
-	/*case 3:
+	case 3:
 	{
 		cout << "Type your Information:" << endl;
 		string info2;
 		cin >> info2;
+		int i = 1;
 		for (auto it = m_teachers_list.begin(); it != m_teachers_list.end(); ++it)
 		{
-			if (strstr((*it).t_name, info2) != NULL || strstr((*it).t_number, info2) != NULL || strstr((*it).t_unit, info2) != NULL)
-			{ //需要自定义一个与strstr()功能相同的函数以实现模糊查找
-				int i = 1;
+			if ((search((*it).t_name,info2) ) ||( search((*it).t_number, info2) ) || (search((*it).t_unit, info2) )||search((*it).t_id,info2))//进行模糊信息匹配
+			{ 
+				
 				cout << i << "." << *it << endl;
 				rightinformation.push_back(*it);
 				++i;
 				k = 1;
 			}
 		}
-		if (k == 0)cout << "No compliant information in the system" << endl;
+		if (k == 0)cout << "\nNo compliant information in the system" << endl;
 		else
 		{
-			cout << "chose your destination info(type the number before the info)" << endl;
+			cout << "\nchose your destination info(type the number before the info)" << endl;
 			int x;
 			cin >> x;                                //模糊查找时二次选择信息
-			cout << rightinformation.at(x) << endl;
+			cout << rightinformation.at(x-1) << endl;
 			vector<teacherinfo> rightinformation1 = { rightinformation.at(x) };
 			return rightinformation1;
 		}
 		break;
-	}*/
-
+	}
 	}
 	return rightinformation;
 }
@@ -125,20 +129,22 @@ void management::t_delete(const vector<teacherinfo>& a)
 					}
 					else k = 0;
 				}
-				if (k == 0)it++;
+				if (k == 0)it++; //当没进行删除操作时，迭代器继续向下进一位
 			}//删除两个容器重合的部分，通过两个迭代器分别遍历两个容器中的元素，找出相同的项，通过m_teachers_list.erase(it)
-			cout << "Complete!\a" << endl;
+			cout << "\n============================Complete!=======================\a" << endl;
 		}
 	}
-	else { cout << "There is no information that can be deleted" << endl; }
-
+	else { cout  << "\n\nThere is no information that can be deleted" << endl; }
 }
 
 void management::t_edit(const vector<teacherinfo>& a)
 {
 	if (a.empty() == 0)
 	{
-		cout << "Choose which info you are going to edit:\n(1.id\n2.name\n3.unit\n4.number\n5.basicsalary\n6.bonus\n7.tax\n8.fund)" << endl;
+		cout << "============================================================\n"
+			<<"\t1.id\n\t2.name\n\t3.unit\n\t4.number\n\t5.basicsalary\n\t6.bonus\n\t7.tax\n\t8.fund\n\t9.cancel"
+			<< "============================================================\n"
+			<<"Choose which info you are going to edit:" << endl;
 		int judge;
 		cin >> judge;
 		switch (judge)
@@ -216,7 +222,10 @@ void management::t_salaryAnalyzeofUnit()
 	cout << "Type the Unit you are going to analyze:cout（\"all\" to analyze all unit)" << endl;
 	string info;
 	cin >> info;
-	cout << "Which information you would like to analyze?\n" << "1 Final Paying Amount\n2 Total Pay Amount\n3 Provident Fund\n4 all of above" << endl;
+	cout <<"============================================================\n"
+		 << "\t1 Final Paying Amount\n\t2 Total Pay Amount\n\t3 Provident Fund\n\t4 all of above\n\t5 Cancel\n" 
+		 << "============================================================\n"
+		 <<"Which information you would like to analyze?\n" << endl;
 	int anwser = 0, k = 0;
 	cin >> anwser;
 	vector<teacherinfo> rightinformation;
@@ -234,17 +243,19 @@ void management::t_salaryAnalyzeofUnit()
 	}
 	if (anwser == 1 || anwser == 2 || anwser == 3)
 	{
-		cout << "The average salary is:" << averaging(rightinformation, anwser) << endl;
-		cout << "Standard deviation is:" << Standard_deviation(rightinformation, anwser) << endl;
+		cout << "============================================================\n"
+			 << "The average salary is:" << averaging(rightinformation, anwser) << "\n\n"
+			 << "Standard deviation is:" << Standard_deviation(rightinformation, anwser) << "\n\n";
 	}
-	else
+	else if(anwser==4)
 	{
-		cout << "Average Final Paying Amount: " << averaging(rightinformation, 1) << endl;
-		cout << "Standard deviation is:" << Standard_deviation(rightinformation, 1) << endl;
-		cout << "Average Total Pay Amount: " << averaging(rightinformation, 2) << endl;
-		cout << "Standard deviation is: " << Standard_deviation(rightinformation, 2) << endl;
-		cout << "Average Provident Fund: " << averaging(rightinformation, 3) << endl;
-		cout << "Standard deviation is: " << Standard_deviation(rightinformation, 3) << endl;
+		cout<<"============================================================\n"
+			<< "Average Final Paying Amount: " << averaging(rightinformation, 1) << "\n\n"
+			<< "Standard deviation is:" << Standard_deviation(rightinformation, 1) << "\n\n"
+			<< "Average Total Pay Amount: " << averaging(rightinformation, 2) << "\n\n"
+			<< "Standard deviation is: " << Standard_deviation(rightinformation, 2) << "\n\n"
+			<< "Average Provident Fund: " << averaging(rightinformation, 3) << "\n\n"
+			<< "Standard deviation is: " << Standard_deviation(rightinformation, 3) << "\n\n";
 	}
 
 }
@@ -268,8 +279,8 @@ void management::t_sort()
 		cout << *it ;
 	}
 
-	cout << "Back to the main menu...\a\n";
-	Sleep(3000);
+	cout << "\tBack to the main menu...\a\n";
+	Sleep(5000);
 }
 
 void management::t_filein(string a,int b)//读取文件并写入到系统中,b参数作为打印文件信息的开关
@@ -295,7 +306,7 @@ void management::t_filein(string a,int b)//读取文件并写入到系统中,b�
 void management::t_fileout()
 {
 	char anwser;
-	cout << "Do you want to write the sorted information to a file?(Y/N)" << endl;
+	cout << "\n\nDo you want to write the sorted information to a file?(Y/N)" << endl;
 	cin >> anwser;
 	if (anwser == 'Y')
 	{
@@ -318,7 +329,7 @@ ostream& operator<<(ostream& os, const teacherinfo& a)
 	return os;
 }
 
-teacherinfo& teacherinfo::operator=(char a[])
+teacherinfo& teacherinfo::operator=(char a[])//重载“="号便于在进行文件读取时将文件中的数据按行导入到容器中的元素中
 {
 	vector<string> b;
 	char* c[100] = { 0 };
@@ -380,10 +391,10 @@ void loop(int x, management& a) //主程序中的循环函数
 		if (x == 3)a.t_delete(a.t_find());
 		if (x == 4)a.t_edit(a.t_find());
 		if (x == 5)a.t_salaryAnalyzeofUnit();
-		cout << "Continue ?(Y/N):" << endl;        //是否继续查找数据
+		cout << "\nContinue ?(Y/N):" << endl;        //是否继续查找数据
 		cin >> anwser;
 	} while (anwser == 'Y');
-	cout << "Back to the main menu...\a\n";
+	cout << "\tBack to the main menu...\a\n";
 	Sleep(300);
 }
 
@@ -409,4 +420,26 @@ double Standard_deviation(const vector<teacherinfo>& a, int b)
 		if (b == 3)sum += ((*it).t_fund - averaging(a, 3)) * ((*it).t_fund - averaging(a, 3));
 	}
 	return sqrt(sum / a.size());
+}
+
+bool search(string a, string b) //模糊查找
+{
+	int e=0;
+	for (int i = 0; i < a.size();++i)
+	{
+		if ((a.at(i) == b.at(0)) && ((a.size() - i) >= b.size()))
+		{
+			int j = i + 1;
+			for (int x = 1; x < b.size(); ++j, ++x)
+			{
+				if (a.at(j) == b.at(x)) e = 1;
+				else
+				{
+					e = 0; break;
+				}
+				if ((x == b.size() - 1) && (e == 1))return 1;
+			}
+		}
+	}
+	return 0; 
 }
