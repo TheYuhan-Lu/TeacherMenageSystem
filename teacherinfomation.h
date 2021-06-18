@@ -7,6 +7,7 @@
 #include<fstream>
 #include <stdlib.h>
 
+
 using namespace std;
 class teacherinfo;
 
@@ -20,9 +21,9 @@ class management
 	void t_delete(const vector<teacherinfo> &a);
 	void t_edit(const vector<teacherinfo>& a);
 	vector<teacherinfo> t_find();
-	void t_salaryAnalyzeofUnit();//其中包含求平均工资的函数
+	void t_salaryAnalyzeofUnit();
 	void t_sort();
-	void t_filein();
+	void t_filein(string a,int b);
 	void t_fileout();
 	
 	friend void loop(int x, management& a);
@@ -51,3 +52,5 @@ public:
 	friend double averaging(const vector<teacherinfo>& a, int b);
 	friend double Standard_deviation(const vector<teacherinfo>& a, int b);
 };
+
+bool search(string a, string b);
