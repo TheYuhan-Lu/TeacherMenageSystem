@@ -4,6 +4,7 @@
 int main() 
 {
 	management System;
+	System.t_filein("teacherdata.txt",0);
 	int Operating_parameter = 1;
 	while (Operating_parameter == 1) 
 	{
@@ -14,18 +15,30 @@ int main()
 			<< "|    /(-(/( /)(-/  //)(//)(/(/(-//)(-/)/  _) (/_) /(-//)   |" << endl
 			<< "|                          _/                /             |" << endl
 			<< "|__________________________________________________________|" << endl << endl;
-		cout << "menu:\n1.Add one information\n2.Find information from the system\n3.Find and delete information that you type\n4.Find and edit information\n5.Analyze information that you choose\n6.Sort the information\n0.Quit\nType the number to choose a function:" << endl;
+		cout << "++++++++++++++++++++++++++ menu ++++++++++++++++++++++++++ \n\t1.Add one information\n\t2.Find information from the system\n\t3.Find and delete information that you type\n\t4.Find and edit information\n\t5.Analyze information that you choose\n\t6.Sort the information\n\t7. show the information in system file \n\t0.Quit\n"
+			<<"============================================================\n"<<"Type the number to choose a function:" << endl;
 		int funcChoice;
 		cin >> funcChoice;
 		system("cls");//清除页面显示
 		switch (funcChoice) 
 		{   //每一个case中断后都会进入while循环
 		case 1://add 
-			cout << "Which way you area gonna to choose to add information?\n1 add by typing\n2 add by scan a file" << endl;
+			cout  
+				<< "Which way you area gonna to choose to add information?\n"
+				<< "============================================================\n"
+				<<"\t1 add by typing\n\t2 add by scan a file\n\t3 Cancel" << endl;
 			char anwser;
 			cin >> anwser;
+			if (anwser != '1' && anwser != '2')break;
 			if (anwser == '1')loop(1, System);
-			if (anwser == '2')System.t_filein();
+			if (anwser == '2') 
+			{	
+				cout << "============================================================\n"
+					<<"Type the name of your file:";
+				string a;
+				cin >> a;
+				System.t_filein(a,1);
+			}
 			System.t_fileout(); //将添加的信息存入文件中
 			break;
 		case 2://find
@@ -47,7 +60,8 @@ int main()
 			System.t_fileout();
 			break;
 		case 7:
-
+			System.t_filein("teacherdata.txt", 1);
+			break;
 		case 0:
 			Operating_parameter = 0;     //通过将该参数置0退出该程序
 			system("cls");
@@ -57,3 +71,4 @@ int main()
 	}
 	return 0;
 }
+
