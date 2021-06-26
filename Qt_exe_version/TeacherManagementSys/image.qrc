@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>image/add-removebg-preview (1).png</file>
+        <file>image/analyze-removebg-preview.png</file>
+        <file>image/delete-removebg-preview.png</file>
+        <file>image/ea70a37b8f0a4dfa805ebd50c096515c.PNG</file>
+        <file>image/refresh.png</file>
+        <file>image/save-removebg-preview.png</file>
+        <file>image/search-removebg-preview.png</file>
+        <file>image/sort-removebg-preview.png</file>
+        <file>image/244E6BD700F1B6B69255D658D985CDAF.png</file>
+    </qresource>
+</RCC>
